@@ -4,7 +4,7 @@ import { mediaCodecs } from "../config/mediasoupConfig";
 let worker: mediasoupTypes.Worker;
 
 export const initWorker = async () => {
-    worker = await createWorker({ rtcMinPort: 10000, rtcMaxPort: 11000 });
+    worker = await createWorker({ rtcMinPort: 10000, rtcMaxPort: 10100 });
     worker.on("died", () => {
         console.error(
             "[mediasoup] Worker가 예기치 못하게 죽었습니다, 2초 후 종료됩니다"
