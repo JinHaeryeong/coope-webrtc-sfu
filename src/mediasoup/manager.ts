@@ -1,5 +1,5 @@
 import { createWorker, types as mediasoupTypes } from "mediasoup";
-import { mediaCodecs } from "../config/mediasoupConfig";
+import { mediaCodecs } from "../config/mediasoupConfig.js";
 
 let worker: mediasoupTypes.Worker;
 

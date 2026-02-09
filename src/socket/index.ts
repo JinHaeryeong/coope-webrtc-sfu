@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { handleSocketEvents } from "./roomHandler";
+import { handleSocketEvents } from "./roomHandler.js";
 
 export const registerSocketHandlers = (io: Server) => {
     io.on("connection", (socket: Socket) => {
