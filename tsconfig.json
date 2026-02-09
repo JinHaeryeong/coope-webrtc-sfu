@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "outDir": "./dist",
+        "esModuleInterop": true,
+        "moduleDetection": "force",
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "noEmit": false,
+        "baseUrl": "."
+    },
+    "include": ["src/**/*.ts", "server.ts"]
+}

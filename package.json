@@ -1,0 +1,37 @@
+{
+    "name": "coope-server",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch server.ts",
+        "build": "tsc",
+        "start": "node dist/server.js"
+    },
+    "dependencies": {
+        "express": "^5.1.0",
+        "mediasoup": "^3.15.7",
+        "socket.io": "^4.8.1",
+        "dotenv": "^16.5.0",
+        "nodemailer": "^6.10.0",
+        "@clerk/backend": "^1.32.2",
+        "cors": "^2.8.5",
+        "jose": "^6.0.10",
+        "nanoid": "^5.1.5"
+    },
+    "devDependencies": {
+        "typescript": "^5.7.3",
+        "@types/node": "^20",
+        "@types/express": "^5.0.1",
+        "@types/cors": "^2.8.17",
+        "@types/socket.io": "^3.0.1",
+        "tsx": "^4.21.0",
+        "ts-node": "^10.9.2"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@clerk/shared",
+            "esbuild",
+            "mediasoup"
+        ]
+    }
+}
