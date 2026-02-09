@@ -6,8 +6,8 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import { initWorker } from "./src/mediasoup/manager.js";
-import { registerSocketHandlers } from "./src/socket/index.js";
+import { initWorker } from "./src/mediasoup/manager";
+import { registerSocketHandlers } from "./src/socket";
 
 
 const app = express();
