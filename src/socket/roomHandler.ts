@@ -122,14 +122,19 @@ export const handleSocketEvents = (io: Server, socket: Socket) => {
             if (!transport) return cb?.();
 
             if (transport.dtlsState === 'connecting' || transport.dtlsState === 'connected') {
+                console.warn(`[Socket] ${socket.id} - 이미 송신 트랜스포트 연결됨`);
                 return cb?.();
             }
 
             await transport.connect({ dtlsParameters });
             cb?.();
         } catch (error: any) {
-            console.error("[Socket] transport-connect 에러:", error.message);
-            cb?.(); // 에러 시에도 콜백 호출
+            if (error.message?.includes('already called')) {
+                return cb?.();
+            }
+            // 에러 전체 객체 로깅
+            console.error("[Socket] transport-connect 에러:", error);
+            cb?.();
         }
     });
 
@@ -157,7 +162,6 @@ export const handleSocketEvents = (io: Server, socket: Socket) => {
             cb?.();
         }
     });
-
 
     // 미디어 전송 시작
     socket.on("transport-produce", async ({ kind, rtpParameters, appData }, cb) => {
