@@ -112,18 +112,53 @@ export const handleSocketEvents = (io: Server, socket: Socket) => {
         });
     });
 
-    // 트랜스포트 연결
-    socket.on("transport-connect", async ({ dtlsParameters }) => {
-        const roomId = socketToRoom.get(socket.id);
-        const transport = rooms.get(roomId!)?.peers.get(socket.id)?.sendTransport;
-        if (transport) await transport.connect({ dtlsParameters });
+
+    socket.on("transport-connect", async ({ dtlsParameters }, cb) => {
+        try {
+            const roomId = socketToRoom.get(socket.id);
+            const peer = rooms.get(roomId!)?.peers.get(socket.id);
+            const transport = peer?.sendTransport;
+
+            if (!transport) return cb?.();
+
+            if (transport.dtlsState === 'connecting' || transport.dtlsState === 'connected') {
+                console.warn(`[Socket] ${socket.id} - 이미 송신 트랜스포트 연결됨`);
+                return cb?.();
+            }
+
+            await transport.connect({ dtlsParameters });
+            cb?.();
+        } catch (error: any) {
+            if (error.message?.includes('already called')) {
+                return cb?.();
+            }
+            // 에러 전체 객체 로깅
+            console.error("[Socket] transport-connect 에러:", error);
+            cb?.();
+        }
     });
 
+    // 수신 트랜스포트 연결 핸들러
     socket.on("recv-transport-connect", async ({ dtlsParameters }, cb) => {
-        const roomId = socketToRoom.get(socket.id);
-        const transport = rooms.get(roomId!)?.peers.get(socket.id)?.recvTransport;
-        if (transport) {
+        try {
+            const roomId = socketToRoom.get(socket.id);
+            const peer = rooms.get(roomId!)?.peers.get(socket.id);
+            const transport = peer?.recvTransport;
+
+            if (!transport) return cb?.();
+
+            if (transport.dtlsState === 'connecting' || transport.dtlsState === 'connected') {
+                console.warn(`[Socket] ${socket.id} - 이미 수신 트랜스포트 연결됨`);
+                return cb?.();
+            }
+
             await transport.connect({ dtlsParameters });
+            cb?.();
+        } catch (error: any) {
+            if (error.message.includes('already called')) {
+                return cb?.();
+            }
+            console.error("[Socket] recv-transport-connect 에러:", error);
             cb?.();
         }
     });
